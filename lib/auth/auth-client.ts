@@ -1,9 +1,11 @@
-import { betterAuth } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
+import { createAuthClient } from "better-auth/react";
 
-// const prisma = new PrismaClient();
-// export const auth = betterAuth({
-//   database: prismaAdapter(prisma, {
-//     provider: "postgresql", // or "mysql", "postgresql", ...etc
-//   }),
-// });
+const authClient = createAuthClient({
+  /** The base URL of the server (optional if you're using the same domain) */
+  baseURL:
+    process.env.NODE_ENV === "production"
+      ? process.env.NEXT_PUBLIC_PRODUCTION_BASE_URL
+      : process.env.NEXT_PUBLIC_DEVELOPMENT_BASE_URL,
+});
+
+export const { signIn, signOut, signUp, useSession } = authClient;
