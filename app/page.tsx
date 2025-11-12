@@ -11,7 +11,6 @@ export default async function Home() {
     redirect("/login");
   }
 
-  console.log("data is", JSON.stringify(session));
   return (
     <div>
       Name : {session?.user.name}

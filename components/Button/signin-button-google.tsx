@@ -3,44 +3,56 @@
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/auth/auth-client";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function SignInWithGoogleButton() {
   const [loading, setLoading] = useState(false);
 
   const handleGoogleLogin = async () => {
     try {
+      setLoading(!loading);
+
       await signIn.social(
         {
           provider: "google",
           callbackURL: "/", // redirect url after the user signs in
           errorCallbackURL: "/error",
-        },
-        {
-          onRequest: (ctx) => {
-            // show loading
-            setLoading(!loading);
-          },
-          onSuccess: (ctx) => {
-            // redirect to the dashboard
-            console.log("signin successful");
-          },
-          onError: (ctx) => {
-            // display error message
+          fetchOptions: {
+            onSuccess: () => {
+              console.log("signin successful");
+            },
+            onError: (error) => {
+              // display error message
+              console.error("Error occurred:", error);
+              toast.error(`${error}`);
+            },
           },
         }
+
+        // {
+        //   onRequest: (ctx) => {
+        //     // show loading
+        //   },
+        //   onSuccess: (ctx) => {
+        // redirect to the dashboard
+        // console.log("signin ssuccessful");
+        // toast.success("Sign in successful!");
+        //   },
+        // onError: (ctx) => {
+        //   // display error message
+        //   toast.error(`${ctx.error.message}`);
+        // },
+        // }
       );
     } catch (error) {
       console.error("Something went wrong", error);
+      toast.error("Failed to log you in. Pls try again after some time");
     } finally {
       setLoading(!loading);
     }
   };
   return (
-    <Button
-      disabled={loading}
-      onClick={() => handleGoogleLogin()}
-      variant="secondary"
-    >
+    <Button disabled={loading} onClick={handleGoogleLogin} variant="secondary">
       Sign in with Google
     </Button>
   );
