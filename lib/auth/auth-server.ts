@@ -1,4 +1,4 @@
-import { prisma } from "@/app/db";
+import { prisma } from "@/db";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 
